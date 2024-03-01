@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Post(models.Model):
-    STATUS = ((0, "Draft"), (1, "Published"))
+    STATUS = [(0, "Draft"), (1, "Published")]
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
     author = models.ForeignKey(
@@ -14,6 +14,7 @@ class Post(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     excerpt = models.CharField(blank=True)
     updated_on = models.DateTimeField(auto_now=True)
+    
 
     class Meta:
         ordering = ["-created_on"]
@@ -37,3 +38,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.author}'
+    

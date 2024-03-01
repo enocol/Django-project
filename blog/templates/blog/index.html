@@ -18,7 +18,7 @@
                                     <p class="author">Author: {{ post.author }}</p>
                                 </div>
                             </div>
-                            <a href="{% url 'post_detail' post.slug %}" class="post-link">
+                            <a href="{% url 'post_detail' post.id %}" class="post-link">
                                 <h2 class="card-title">{{ post.title }}</h2>
                             </a>
 
@@ -29,10 +29,13 @@
                     </div>
                 </div>
                 {% if forloop.counter|divisibleby:3 %}
+                
             </div>
             <div class="row">
-                {% endif %}
-                {% endfor %}
+            {% endif %}
+            
+            
+            {% endfor %}
 
             </div>
         </div>

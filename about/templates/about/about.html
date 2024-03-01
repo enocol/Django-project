@@ -1,0 +1,23 @@
+<!-- {% extends 'base.html' %} -->
+{% load static %}
+
+
+{% block content %}
+
+<div class="about-container">
+    <div class="image">
+        <img src="{% static 'images/nobody.jpg' %}" alt="">
+    </div>
+    <div class="content-container">
+        <div id="author"><h1>{{about.author}}</h1></div>
+        <div class="content"> <p>{{about.content | safe}}</p></div>
+        <div>{{about.updated_on}}</div>
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+    
