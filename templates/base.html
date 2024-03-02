@@ -69,7 +69,37 @@
         </div>
     </nav>
 
+    <!-- displaying Django messages -->
+<div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible
+          fade show" id="msg" role="alert">
+          {{ message | safe }}
+          <button type="button" class="btn-close"
+            data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
     <main class="flex-shrink-0 main-bg">
+     
+        {% if user.is_authenticated%}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Welcome {{ user}}!</strong> You are now logged in.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {%else%}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong>GoodBye</strong> You are now logged out.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+    
+      
 
         {% block content %}
         <!-- Content Goes here -->

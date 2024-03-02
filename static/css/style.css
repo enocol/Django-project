@@ -194,3 +194,9 @@ body {
 #author {
     text-transform: uppercase;
 }
+
+#comments-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
