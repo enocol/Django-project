@@ -1,6 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.views import generic
-from .models import Post
+from .models import Post, Comment
 from .forms import CommentForm
 from django.contrib import messages
 
@@ -14,15 +16,9 @@ class PostList(generic.ListView):
 
 
 
-# def post_detail(request, id):
-#     post = Post.objects.get(id=id)
-#     return render(request, "blog/post_detail.html", {"post": post})
-
-
-def post_detail(request, id):
-    queryset = Post.objects.all().order_by("-created_on")
-    post = get_object_or_404(queryset, id=id)
-    comments = post.comments.filter(approved=True) 
+def post_detail(request, slug):
+    post = Post.objects.get(slug=slug)
+    comments = post.comments.all() 
 
     
     comment_form = CommentForm()
@@ -42,10 +38,32 @@ def post_detail(request, id):
         request, messages.SUCCESS,
         'Comment submitted and awaiting approval'
     )
+    return render(request, "blog/post_detail.html", context)
 
-    return render(
-        request,
-        "blog/post_detail.html",
-        context
+
+def comment_edit(request, pk):
+    comment = Comment.objects.get(pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.approved = False
+            comment.save()
+            return redirect('post_detail', slug=comment.post.slug)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'blog/comment_edit.html', {'form': form})
+
+
+def delete_comment(request, pk):
+    comment = Comment.objects.get(pk=pk)
+    comment.delete()
+    messages.add_message(
+        request, messages.SUCCESS,
+        'Comment deleted successfully'
     )
+    return redirect('post_detail', slug=comment.post.slug)
+    # return HttpResponseRedirect(reverse('post_detail', args=[comment.post.slug]))
+
+
 

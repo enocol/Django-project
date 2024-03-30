@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 
 # Create your models here.
@@ -15,6 +16,7 @@ class Post(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     excerpt = models.CharField(blank=True)
     updated_on = models.DateTimeField(auto_now=True)
+    featured_image = CloudinaryField('image', default='placeholder')
     
 
     class Meta:
@@ -30,7 +32,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     body= models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
-    updated_one = models.DateTimeField(auto_now=True)
+    updated_on = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)
 
 
