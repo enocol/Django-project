@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views import generic
 from .models import Post, Comment
-from .forms import CommentForm
+from .forms import CommentForm, AddPost
 from django.contrib import messages
 
 
@@ -16,11 +16,9 @@ class PostList(generic.ListView):
 
 
 
-def post_detail(request, slug):
-    post = Post.objects.get(slug=slug)
+def post_detail(request, id):
+    post = Post.objects.get(id=id)
     comments = post.comments.all() 
-
-    
     comment_form = CommentForm()
     context={"post": post,
              "coder": "Enoh C",
@@ -49,7 +47,7 @@ def comment_edit(request, pk):
             comment = form.save(commit=False)
             comment.approved = False
             comment.save()
-            return redirect('post_detail', slug=comment.post.slug)
+            return redirect('post_detail', id=comment.post.id)
     else:
         form = CommentForm(instance=comment)
     return render(request, 'blog/comment_edit.html', {'form': form})
@@ -62,8 +60,21 @@ def delete_comment(request, pk):
         request, messages.SUCCESS,
         'Comment deleted successfully'
     )
-    return redirect('post_detail', slug=comment.post.slug)
+    return redirect('post_detail', id=comment.post.id)
     # return HttpResponseRedirect(reverse('post_detail', args=[comment.post.slug]))
+
+
+def add_post(request):
+    if request.method == "POST":
+        form = AddPost(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('home')
+    else:
+        form = AddPost()
+    return render(request, 'blog/add_post.html', {'form': form})
 
 
 

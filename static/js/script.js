@@ -1,4 +1,17 @@
-console.log('Hello from script.js static file!')
+const editButtons = document.getElementsByClassName("btn-edit");
+const commentText = document.getElementById("id_body");
+const commentForm = document.getElementById("commentForm");
+const submitButton = document.getElementById("submitButton");
 
-const h1 = document.getElementById('heading')
-console.log(h1)
+
+for (let button of editButtons) {
+  button.addEventListener("click", (e) => {
+    let commentId = e.target.getAttribute("comment_id");
+    let commentContent = document.getElementById(`comment${commentId}`).innerText;
+    commentText.value = commentContent;
+    commentForm.action = `/comment/${commentId}/`;
+    submitButton.innerText = "Update";
+    commentText.focus();
+
+  });
+}
