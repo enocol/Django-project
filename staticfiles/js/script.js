@@ -1,17 +1,20 @@
+const editButtons = document.getElementsByClassName("btn-edit");
 const commentText = document.getElementById("id_body");
-console.log(commentText);
 const commentForm = document.getElementById("commentForm");
-console.log(commentForm);
 const submitButton = document.getElementById("submitButton");
-console.log(submitButton);
 
-const editButtons = document.querySelectorAll('.btn-edit');
 
-for (let buttons of editButtons) {
-    buttons.addEventListener('click', (e) => {
-        const id = e.target.getAttribute('comment_id');
-        const comment_id = document.getElementById("comment_id");
-        console.log(comment_id);
-    })
+for (let button of editButtons) {
+  button.addEventListener("click", (e) => {
+    let commentId = e.target.getAttribute("comment_id");
+    let commentContent = document.getElementById(`comment${commentId}`).innerText;
+    commentText.value = commentContent;
+    commentForm.action = `/comment/${commentId}/`;
+    submitButton.innerText = "Update";
+    commentText.focus();
 
+  });
 }
+
+
+
